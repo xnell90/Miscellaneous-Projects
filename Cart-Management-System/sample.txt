@@ -1,0 +1,4 @@
+Pizza  Really Good  12.30  20
+Salad  Really Good  15.50  30
+Hunger Burger  Really Good  12.30  20
+Fried Chicken Fried  Really Good  12.30  20
