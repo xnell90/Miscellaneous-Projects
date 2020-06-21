@@ -15,9 +15,9 @@ it described the following algorithm to produce a drawing.
 6. Repeat steps 4 and 5 as many times as you like.
 
 <p align = 'justify'>
-After watching the video, I decided to implement the above algorithm using Java. For my own exploration, I took three points 
-so that it forms an equilateral triangle, place my seed point at the center of the triangle, and then repeated steps 4 and 5 
-for more than 2000 iterations. By running the program, it produced an unusual shape. 
+After watching the video, I decided to implement the above algorithm using Java. For my own exploration, I took three points
+so that it forms an equilateral triangle, place my seed point at the center of the triangle, and then repeated steps 4 and 5
+for more than 2000 iterations. By running the program, it produced an unusual shape.
 </p>
 
 ---
@@ -27,11 +27,11 @@ for more than 2000 iterations. By running the program, it produced an unusual sh
 If you are interested in running the code that I made, there are two files you need to download my java script.
 </p>
 
- * Sierpinski.java 
- * and the StdDraw.java file. 
+ * Sierpinski.java
+ * and the StdDraw.java file.
 
 <p align = 'justify'>
-Since the Sierpinski.java is dependent StdDraw.java, Sierpinski.java will not run if the StdDraw.java 
+Since the Sierpinski.java is dependent StdDraw.java, Sierpinski.java will not run if the StdDraw.java
 does not exist within the same directory as Sierpinski.java. For Macs:
 </p>
 
@@ -44,7 +44,7 @@ does not exist within the same directory as Sierpinski.java. For Macs:
 ### Result of The Construction
 
 <p align="center">
-  <img src="https://github.com/xnell90/Sierpinski_Dot_Generator/blob/master/Sierpinski.jpg"/>
+  <img src="https://github.com/xnell90/Miscellaneous-Projects/blob/master/Sierpinski_Dot_Generator/Sierpinski.jpg"/>
 </p>
 
 <p align = 'justify'>
