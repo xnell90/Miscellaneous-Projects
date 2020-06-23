@@ -58,11 +58,11 @@ def tensor_to_image(tensor):
 
 # ## Define NST Model That Extracts Outputs From The Intermediate Layers (VGG19)
 
-c_layers = ['block5_conv2']
-s_layers = ['block1_conv1', 'block2_conv1', 'block3_conv1', 'block4_conv1', 'block5_conv1']
+C_LAYERS = ['block5_conv2']
+S_LAYERS = ['block1_conv1', 'block2_conv1', 'block3_conv1', 'block4_conv1', 'block5_conv1']
 
-num_c_layers = len(c_layers)
-num_s_layers = len(s_layers)
+NUM_C_LAYERS = len(C_LAYERS)
+NUM_S_LAYERS = len(S_LAYERS)
 
 def vgg_layers(layer_names):
     vgg = VGG19(include_top = False, weights = 'imagenet')
@@ -108,7 +108,7 @@ class StyleContentModel(tf.keras.models.Model):
 
         return {'c':c_dict, 's':s_dict}
 
-extractor = StyleContentModel(s_layers, c_layers)
+extractor = StyleContentModel(S_LAYERS, C_LAYERS)
 s_targets = extractor(s_image)['s']
 c_targets = extractor(c_image)['c']
 print("1) Loaded VGG19 Model ...")
@@ -130,7 +130,7 @@ def style_content_loss(outputs):
         ]
     )
 
-    s_loss *= s_weight / num_s_layers
+    s_loss *= s_weight / NUM_S_LAYERS
 
     c_loss = tf.add_n(
         [
@@ -139,7 +139,7 @@ def style_content_loss(outputs):
         ]
     )
 
-    c_loss *= c_weight / num_c_layers
+    c_loss *= c_weight / NUM_C_LAYERS
 
     return s_loss + c_loss
 
