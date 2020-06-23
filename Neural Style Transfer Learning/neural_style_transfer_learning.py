@@ -28,9 +28,9 @@ s_path = args.s_image_path #s = style
 
 # ## Define Functions That Convert Images <-> Tensors
 
-def image_to_tensor(path_to_img):
+def image_to_tensor(image_path):
     max_dim = 1024
-    image_tensor = tf.io.read_file(path_to_img)
+    image_tensor = tf.io.read_file(image_path)
     image_tensor = tf.image.decode_image(image_tensor, channels = 3)
     image_tensor = tf.image.convert_image_dtype(image_tensor, tf.float32)
 
