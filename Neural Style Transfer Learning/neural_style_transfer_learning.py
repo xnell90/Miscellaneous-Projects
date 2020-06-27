@@ -16,8 +16,8 @@ from PIL.Image import fromarray
 
 # ## Define Content Image and Style Image Paths
 parser = argparse.ArgumentParser(description = 'Neural Style Transfer with TF 2.0')
-parser.add_argument("c_image_path", type = str, metavar = "base",  help = "Path to Content Image.")
-parser.add_argument("s_image_path", type = str, metavar = "style", help = "Path to Style Image.")
+parser.add_argument("c_image_path", type = str, metavar = "base_image_path",  help = "Path to Content Image.")
+parser.add_argument("s_image_path", type = str, metavar = "style_image_path", help = "Path to Style Image.")
 parser.add_argument("--c_weight", type = float, default = 1.0, required = False, help = "Content Weight.")
 parser.add_argument("--s_weight", type = float, default = 100.0, required = False, help = "Style Weight.")
 parser.add_argument("--tv_weight", type = float, default = 20.0, required = False, help = 'Total Variation Weight.')
