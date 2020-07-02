@@ -18,6 +18,7 @@ from PIL.Image import fromarray
 parser = argparse.ArgumentParser(description = 'Neural Style Transfer with TF 2.0')
 parser.add_argument("c_image_path", type = str, metavar = "base_image_path",  help = "Path to Content Image.")
 parser.add_argument("s_image_path", type = str, metavar = "style_image_path", help = "Path to Style Image.")
+parser.add_argument("--iterations", type = int, default = 40, required = False, help = 'Iterations.')
 parser.add_argument("--c_weight", type = float, default = 1.0, required = False, help = "Content Weight.")
 parser.add_argument("--s_weight", type = float, default = 100.0, required = False, help = "Style Weight.")
 parser.add_argument("--tv_weight", type = float, default = 20.0, required = False, help = 'Total Variation Weight.')
@@ -164,10 +165,13 @@ def train_step(image):
     image_tensor.assign(clip_0_1(image_tensor))
 
 # ## Train And Display New Image
-for _ in tqdm(range(40), desc = '2) Generating Stylized Image'):
+iterations = args.iterations
+for _ in tqdm(range(iterations), desc = '2) Generating Stylized Image'):
     train_step(image_tensor)
 
-print("3) Displaying Stylized Image ...")
+new_image_name = input("3) Enter New Image Name: ")
+
+print("4) Displaying Stylized Image ...")
 stylized_image = tensor_to_image(image_tensor)
-stylized_image.save('stylized_image.png')
+stylized_image.save(new_image_name + '.png')
 stylized_image.show()
