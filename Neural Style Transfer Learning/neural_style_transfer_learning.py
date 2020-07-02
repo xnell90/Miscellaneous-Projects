@@ -18,6 +18,7 @@ from PIL.Image import fromarray
 parser = argparse.ArgumentParser(description = 'Neural Style Transfer with TF 2.0')
 parser.add_argument("c_image_path", type = str, metavar = "base_image_path",  help = "Path to Content Image.")
 parser.add_argument("s_image_path", type = str, metavar = "style_image_path", help = "Path to Style Image.")
+parser.add_argument("--new_image", type = str, default = 'stylized', required = False, help = "New Image Name.")
 parser.add_argument("--iterations", type = int, default = 40, required = False, help = 'Iterations.')
 parser.add_argument("--c_weight", type = float, default = 1.0, required = False, help = "Content Weight.")
 parser.add_argument("--s_weight", type = float, default = 100.0, required = False, help = "Style Weight.")
@@ -158,7 +159,7 @@ def train_step(image):
     with tf.GradientTape() as tape:
         outputs = extractor(image_tensor)
         loss  = style_content_loss(outputs)
-        loss += tv_weight * tf.image.total_variation(image_tensor) # To smoothen image
+        loss += tv_weight * tf.image.total_variation(image_tensor)
 
     gradients = tape.gradient(loss, image_tensor)
     optimizer.apply_gradients([(gradients, image_tensor)])
@@ -169,9 +170,9 @@ iterations = args.iterations
 for _ in tqdm(range(iterations), desc = '2) Generating Stylized Image'):
     train_step(image_tensor)
 
-new_image_name = input("3) Enter New Image Name: ")
+new_image = args.new_image
 
 print("4) Displaying Stylized Image ...")
 stylized_image = tensor_to_image(image_tensor)
-stylized_image.save(new_image_name + '.png')
+stylized_image.save(new_image + '.png')
 stylized_image.show()
