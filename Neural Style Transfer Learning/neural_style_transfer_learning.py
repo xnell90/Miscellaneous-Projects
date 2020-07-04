@@ -115,35 +115,39 @@ s_targets = extractor(s_image)['s']
 c_targets = extractor(c_image)['c']
 print("1) Loaded VGG19 Model ...")
 
-# ## Define Style and Content Loss
+# ## Define Style Loss, Content Loss, and Total Variation Loss
 
 c_weight  = args.c_weight
 s_weight  = args.s_weight
 tv_weight = args.tv_weight # tv = total_variation
 
-def style_content_loss(outputs):
-    s_outputs = outputs['s']
+def content_loss(outputs):
     c_outputs = outputs['c']
-
-    s_loss = tf.add_n(
-        [
-            tf.reduce_mean((s_outputs[name] - s_targets[name]) ** 2)
-            for name in s_outputs.keys()
-        ]
-    )
-
-    s_loss *= s_weight / NUM_S_LAYERS
-
     c_loss = tf.add_n(
         [
             tf.reduce_mean((c_outputs[name] - c_targets[name]) ** 2)
             for name in c_outputs.keys()
         ]
     )
-
     c_loss *= c_weight / NUM_C_LAYERS
 
-    return s_loss + c_loss
+    return c_loss
+
+
+def style_loss(outputs):
+    s_outputs = outputs['s']
+    s_loss = tf.add_n(
+        [
+            tf.reduce_mean((s_outputs[name] - s_targets[name]) ** 2)
+            for name in s_outputs.keys()
+        ]
+    )
+    s_loss *= s_weight / NUM_S_LAYERS
+
+    return s_loss
+
+def total_variation_loss(image_tensor):
+    return tv_weight * tf.image.total_variation(image_tensor)
 
 # ## Define Training Step
 
@@ -155,11 +159,12 @@ def clip_0_1(image_tensor):
     return tf.clip_by_value(image_tensor, 0.0, 1.0)
 
 @tf.function()
-def train_step(image):
+def train_step(image_tensor):
     with tf.GradientTape() as tape:
         outputs = extractor(image_tensor)
-        loss  = style_content_loss(outputs)
-        loss += tv_weight * tf.image.total_variation(image_tensor)
+        loss  = content_loss(outputs)
+        loss += style_loss(outputs)
+        loss += total_variation_loss(image_tensor)
 
     gradients = tape.gradient(loss, image_tensor)
     optimizer.apply_gradients([(gradients, image_tensor)])
