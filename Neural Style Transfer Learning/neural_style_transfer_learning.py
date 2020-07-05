@@ -177,7 +177,7 @@ for _ in tqdm(range(iterations), desc = '2) Generating Stylized Image'):
 
 new_image = args.new_image
 
-print("4) Displaying Stylized Image ...")
+print("3) Displaying Stylized Image ...")
 stylized_image = tensor_to_image(image_tensor)
 stylized_image.save(new_image + '.png')
 stylized_image.show()
