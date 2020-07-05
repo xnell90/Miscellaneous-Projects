@@ -16,9 +16,11 @@ from PIL.Image import fromarray
 
 # ## Define Content Image and Style Image Paths
 parser = argparse.ArgumentParser(description = 'Neural Style Transfer with TF 2.0')
+
 parser.add_argument("c_image_path", type = str, metavar = "base_image_path",  help = "Path to Content Image.")
 parser.add_argument("s_image_path", type = str, metavar = "style_image_path", help = "Path to Style Image.")
 parser.add_argument("--new_image", type = str, default = 'stylized', required = False, help = "New Image Name.")
+
 parser.add_argument("--iterations", type = int, default = 40, required = False, help = 'Iterations.')
 parser.add_argument("--c_weight", type = float, default = 1.0, required = False, help = "Content Weight.")
 parser.add_argument("--s_weight", type = float, default = 100.0, required = False, help = "Style Weight.")
@@ -153,7 +155,7 @@ def total_variation_loss(image_tensor):
 
 image_tensor = tf.Variable(c_image)
 parameters = {'learning_rate': 0.02, 'beta_1': 0.99, 'epsilon': 1e-1}
-optimizer  = tf.optimizers.Adam(**parameters)
+optimizer  = tf.keras.optimizers.Adam(**parameters)
 
 def clip_0_1(image_tensor):
     return tf.clip_by_value(image_tensor, 0.0, 1.0)
