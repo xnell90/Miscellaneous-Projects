@@ -97,8 +97,7 @@ class StyleContentModel(tf.keras.models.Model):
         self.vgg.trainable = False
 
     def call(self, inputs):
-        "Expects float input in [0,1]"
-        outputs = self.vgg(preprocess_input(inputs * 255))
+        outputs = self.vgg(preprocess_input(inputs))
 
         s_outputs, c_outputs = (
             outputs[:self.num_s_layers],
@@ -170,12 +169,13 @@ def train_step(image_tensor):
 
     gradients = tape.gradient(loss, image_tensor)
     optimizer.apply_gradients([(gradients, image_tensor)])
-    image_tensor.assign(clip_0_1(image_tensor))
 
 # ## Train And Display New Image
 iterations = args.iterations
 for _ in tqdm(range(iterations), desc = '2) Generating Stylized Image'):
     train_step(image_tensor)
+
+image_tensor.assign(clip_0_1(image_tensor))
 
 new_image = args.new_image
 
