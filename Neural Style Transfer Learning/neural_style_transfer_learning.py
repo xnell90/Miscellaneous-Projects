@@ -11,7 +11,6 @@ from tensorflow.keras import Model
 from tensorflow.keras.applications import VGG19
 from tensorflow.keras.applications.vgg19 import preprocess_input
 from tqdm import tqdm
-from IPython.display import Image as IPImage
 from PIL.Image import fromarray
 
 # ## Define Content Image and Style Image Paths
