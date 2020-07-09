@@ -21,8 +21,8 @@ parser.add_argument("s_image_path", type = str, metavar = "style_image_path", he
 parser.add_argument("--new_image", type = str, default = 'stylized', required = False, help = "New Image Name.")
 
 parser.add_argument("--iterations", type = int, default = 40, required = False, help = 'Iterations.')
-parser.add_argument("--c_weight", type = float, default = 1.0, required = False, help = "Content Weight.")
-parser.add_argument("--s_weight", type = float, default = 100.0, required = False, help = "Style Weight.")
+parser.add_argument("--c_weight", type = float, default = 1e4, required = False, help = "Content Weight.")
+parser.add_argument("--s_weight", type = float, default = 1e-2, required = False, help = "Style Weight.")
 parser.add_argument("--tv_weight", type = float, default = 20.0, required = False, help = 'Total Variation Weight.')
 
 args = parser.parse_args()
