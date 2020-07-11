@@ -41,8 +41,7 @@ c_image = image_to_tensor(c_path) #c = content
 s_image = image_to_tensor(s_path) #s = style
 
 def tensor_to_image(tensor):
-    tensor = tensor * 255
-    tensor = np.array(tensor, dtype = np.uint8)
+    tensor = np.array(255 * tensor, dtype = np.uint8)
 
     if np.ndim(tensor) > 3:
         assert tensor.shape[0] == 1
