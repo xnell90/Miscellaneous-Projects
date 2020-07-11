@@ -178,8 +178,11 @@ def train_step(image_tensor):
 
 # ## Train And Display New Image
 iterations = args.iterations
-for _ in tqdm(range(iterations), desc = '2)   Generating Stylized Image'):
+for i in tqdm(range(iterations), desc = '2)   Generating Stylized Image'):
     train_step(image_tensor)
+    if i % 10 == 0:
+        stylized_image = tensor_to_image(image_tensor)
+        stylized_image.save(str(i) + '.png')
 
 new_image = args.new_image
 
