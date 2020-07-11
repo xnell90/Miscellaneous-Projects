@@ -10,6 +10,7 @@ import time
 from tensorflow.keras import Model
 from tensorflow.keras.applications import VGG19
 from tensorflow.keras.applications.vgg19 import preprocess_input
+from tensorflow.keras.optimizers import Adam
 from tqdm import tqdm
 from PIL.Image import fromarray
 
@@ -18,7 +19,9 @@ parser = argparse.ArgumentParser(description = 'Neural Style Transfer with TF 2.
 
 parser.add_argument("c_image_path", type = str, metavar = "base_image_path",  help = "Path to Content Image.")
 parser.add_argument("s_image_path", type = str, metavar = "style_image_path", help = "Path to Style Image.")
+
 parser.add_argument("--new_image", type = str, default = 'stylized', required = False, help = "New Image Name.")
+parser.add_argument("--max_dim", type = int, default = 512, required = False, help = 'Maximum Dimension.')
 
 parser.add_argument("--iterations", type = int, default = 40, required = False, help = 'Iterations.')
 parser.add_argument("--c_weight", type = float, default = 1e4, required = False, help = "Content Weight.")
@@ -31,8 +34,7 @@ s_path = args.s_image_path #s = style
 
 # ## Define Functions That Convert Images <-> Tensors
 
-def image_to_tensor(image_path):
-    max_dim = 512
+def image_to_tensor(image_path, max_dim = 512):
     image_tensor = tf.io.read_file(image_path)
     image_tensor = tf.image.decode_image(image_tensor, channels = 3)
     image_tensor = tf.image.convert_image_dtype(image_tensor, tf.float32)
@@ -46,12 +48,12 @@ def image_to_tensor(image_path):
 
     return image_tensor
 
-c_image = image_to_tensor(c_path) #c = content
-s_image = image_to_tensor(s_path) #s = style
+max_dim = args.max_dim
+c_image = image_to_tensor(c_path, max_dim) #c = content
+s_image = image_to_tensor(s_path, max_dim) #s = style
 
 def tensor_to_image(tensor):
-    tensor = tensor * 255
-    tensor = np.array(tensor, dtype = np.uint8)
+    tensor = np.array(255 * tensor, dtype = np.uint8)
 
     if np.ndim(tensor) > 3:
         assert tensor.shape[0] == 1
@@ -114,7 +116,7 @@ class StyleContentModel(tf.keras.models.Model):
 extractor = StyleContentModel(S_LAYERS, C_LAYERS)
 s_targets = extractor(s_image)['s']
 c_targets = extractor(c_image)['c']
-print("1) Loaded VGG19 Model ...")
+print("1)   Loaded VGG19 Model ...")
 
 # ## Define Style Loss, Content Loss, and Total Variation Loss
 
@@ -154,7 +156,7 @@ def total_variation_loss(image_tensor):
 
 image_tensor = tf.Variable(c_image)
 parameters = {'learning_rate': 0.02, 'beta_1': 0.99, 'epsilon': 1e-1}
-optimizer  = tf.keras.optimizers.Adam(**parameters)
+optimizer  = Adam(**parameters)
 
 def clip_0_1(image_tensor):
     return tf.clip_by_value(image_tensor, 0.0, 1.0)
@@ -163,9 +165,12 @@ def clip_0_1(image_tensor):
 def train_step(image_tensor):
     with tf.GradientTape() as tape:
         outputs = extractor(image_tensor)
-        loss  = content_loss(outputs)
-        loss += style_loss(outputs)
-        loss += total_variation_loss(image_tensor)
+
+        c_loss  = content_loss(outputs)
+        s_loss  = style_loss(outputs)
+        tv_loss = total_variation_loss(image_tensor)
+
+        loss = c_loss + s_loss + tv_loss
 
     gradients = tape.gradient(loss, image_tensor)
     optimizer.apply_gradients([(gradients, image_tensor)])
@@ -173,12 +178,12 @@ def train_step(image_tensor):
 
 # ## Train And Display New Image
 iterations = args.iterations
-for _ in tqdm(range(iterations), desc = '2) Generating Stylized Image'):
+for _ in tqdm(range(iterations), desc = '2)   Generating Stylized Image'):
     train_step(image_tensor)
 
 new_image = args.new_image
 
-print("3) Displaying Stylized Image ...")
+print("3)   Displaying Stylized Image ...")
 stylized_image = tensor_to_image(image_tensor)
 stylized_image.save(new_image + '.png')
 stylized_image.show()
