@@ -23,6 +23,7 @@ parser.add_argument("s_image_path", type = str, metavar = "style_image_path", he
 parser.add_argument("--new_image", type = str, default = 'stylized', required = False, help = "New Image Name.")
 parser.add_argument("--max_dim", type = int, default = 512, required = False, help = 'Maximum Dimension.')
 
+parser.add_argument("--save_training_images", type = bool, default = False, required = False, help = 'Save Training Images.')
 parser.add_argument("--iterations", type = int, default = 40, required = False, help = 'Iterations.')
 parser.add_argument("--c_weight", type = float, default = 1e4, required = False, help = "Content Weight.")
 parser.add_argument("--s_weight", type = float, default = 1e-2, required = False, help = "Style Weight.")
@@ -178,9 +179,10 @@ def train_step(image_tensor):
 
 # ## Train And Display New Image
 iterations = args.iterations
+save_training_images = args.save_training_images
 for i in tqdm(range(iterations), desc = '2)   Generating Stylized Image'):
     train_step(image_tensor)
-    if i % 10 == 0:
+    if i % 10 == 0 and save_training_images:
         stylized_image = tensor_to_image(image_tensor)
         stylized_image.save(str(i) + '.png')
 
