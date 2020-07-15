@@ -20,10 +20,10 @@ parser = argparse.ArgumentParser(description = 'Neural Style Transfer with TF 2.
 parser.add_argument("c_image_path", type = str, metavar = "base_image_path",  help = "Path to Content Image.")
 parser.add_argument("s_image_path", type = str, metavar = "style_image_path", help = "Path to Style Image.")
 
-parser.add_argument("--new_image", type = str, default = 'stylized', required = False, help = "New Image Name.")
-parser.add_argument("--max_dim", type = int, default = 512, required = False, help = 'Maximum Dimension.')
+parser.add_argument("--new_image", type = str, default = 'combined', required = False, help = "New Image Name.")
+parser.add_argument("--max_dimension", type = int, default = 512, required = False, help = 'Maximum Dimension.')
 
-parser.add_argument("--save_training_images", type = bool, default = False, required = False, help = 'Save Training Images.')
+parser.add_argument("--save_progress", type = bool, default = False, required = False, help = 'Save Progress @ Every 10th Iteration.')
 parser.add_argument("--iterations", type = int, default = 40, required = False, help = 'Iterations.')
 parser.add_argument("--c_weight", type = float, default = 1e4, required = False, help = "Content Weight.")
 parser.add_argument("--s_weight", type = float, default = 1e-2, required = False, help = "Style Weight.")
@@ -35,13 +35,13 @@ s_path = args.s_image_path #s = style
 
 # ## Define Functions That Convert Images <-> Tensors
 
-def image_to_tensor(image_path, max_dim = 512):
+def image_to_tensor(image_path, max_dimension = 512):
     image_tensor = tf.io.read_file(image_path)
     image_tensor = tf.image.decode_image(image_tensor, channels = 3)
     image_tensor = tf.image.convert_image_dtype(image_tensor, tf.float32)
 
     shape = tf.cast(tf.shape(image_tensor)[:-1], tf.float32)
-    scale = max_dim / max(shape)
+    scale = max_dimension / max(shape)
 
     new_shape = tf.cast(shape * scale, tf.int32)
     image_tensor = tf.image.resize(image_tensor, new_shape)
@@ -49,9 +49,9 @@ def image_to_tensor(image_path, max_dim = 512):
 
     return image_tensor
 
-max_dim = args.max_dim
-c_image = image_to_tensor(c_path, max_dim) #c = content
-s_image = image_to_tensor(s_path, max_dim) #s = style
+max_dimension = args.max_dimension
+c_image = image_to_tensor(c_path, max_dimension) #c = content
+s_image = image_to_tensor(s_path, max_dimension) #s = style
 
 def tensor_to_image(tensor):
     tensor = np.array(255 * tensor, dtype = np.uint8)
@@ -179,10 +179,10 @@ def train_step(image_tensor):
 
 # ## Train And Display New Image
 iterations = args.iterations
-save_training_images = args.save_training_images
+save_progress = args.save_progress
 for i in tqdm(range(iterations), desc = '2)   Generating Stylized Image'):
     train_step(image_tensor)
-    if i % 10 == 0 and save_training_images:
+    if i % 10 == 0 and save_progress:
         stylized_image = tensor_to_image(image_tensor)
         stylized_image.save(str(i) + '.png')
 
