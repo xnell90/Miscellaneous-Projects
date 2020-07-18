@@ -180,6 +180,7 @@ def train_step(image_tensor):
 # ## Train And Display New Image
 iterations = args.iterations
 save_progress = args.save_progress
+
 for i in tqdm(range(iterations), desc = '2)   Generating Stylized Image'):
     train_step(image_tensor)
     if i % 10 == 0 and save_progress:
