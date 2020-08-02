@@ -20,8 +20,10 @@ public class TheSystem {
      		   String[] itemAttributes = line.split("  ");
 
      		   Item item = new Item();
+               
      		   item.setItemName(itemAttributes[0]);
      		   item.setItemDesc(itemAttributes[1]);
+
      		   item.setItemPrice(Double.parseDouble(itemAttributes[2]));
      		   item.setAvailableQuantity(Integer.parseInt(itemAttributes[3]));
 

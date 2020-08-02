@@ -19,14 +19,19 @@ public class MainEntryPoint {
 			case 1:
 				Item item = new Item();
 				reader.nextLine();
+
 				System.out.print("\nEnter the item name:\n");
 				item.setItemName(reader.nextLine());
+
 				System.out.print("\nEnter a description for the item:\n");
 				item.setItemDesc(reader.nextLine());
+
 				System.out.print("\nEnter the item's price:\n");
 				item.setItemPrice(reader.nextDouble());
+
 				System.out.print("\nEnter the quantity available in the System:\n");
 				item.setAvailableQuantity(reader.nextInt());
+
 				System.out.println(item.getItemName());
 				if (app.add(item)) {
 					System.out.println("Item successfully added");
@@ -36,15 +41,16 @@ public class MainEntryPoint {
 				break;
 			case 2:
 				app.display();
+
 				System.out.println("Enter the name of the item:");
 				reader.nextLine();
+
 				String item_name = reader.nextLine();
 				if (cart.add(app.getItemCollection().get(item_name))) {
 					System.out.println("Item successfully added");
 				} else {
 					System.out.println("Invalid or Unavailable Item, Please Try Again");
 				}
-				;
 				break;
 			case 3:
 				cart.display();
@@ -54,8 +60,10 @@ public class MainEntryPoint {
 				break;
 			case 5:
 				cart.display();
+
 				System.out.println("Enter the name of the item:");
 				reader.nextLine();
+
 				item_name = reader.nextLine();
 				if (cart.remove(item_name) != null) {
 					System.out.println(item_name + " was removed from the cart");
@@ -65,8 +73,10 @@ public class MainEntryPoint {
 				break;
 			case 6:
 				app.display();
+
 				System.out.println("Enter the name of the item");
 				reader.nextLine();
+
 				item_name = reader.nextLine();
 				if (app.remove(item_name) != null) {
 

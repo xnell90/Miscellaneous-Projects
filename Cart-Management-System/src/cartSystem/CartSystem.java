@@ -20,6 +20,7 @@ public class CartSystem extends TheSystem {
 
 			double quantity = (double)current.get(itemName).getQuantity();
 			double price = current.get(itemName).getItemPrice();
+
 			System.out.println(quantity + ", " + price);
 
 			subTotal += price * quantity;
