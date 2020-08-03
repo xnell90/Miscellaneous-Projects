@@ -2,13 +2,7 @@ import itertools
 import time
 
 def queen_arrangement(base_8):
-    queen_arrangement = []
-
-    row = 0
-    while row < len(base_8):
-        queen_arrangement.append([row, base_8[row]])
-        row += 1
-
+    queen_arrangement = [[row, base_8[row]] for row in range(len(base_8))]
     return queen_arrangement
 
 def queens_attack(queen_1, queen_2):
@@ -32,18 +26,12 @@ def queens_attack(queen_1, queen_2):
 def check_arrangement(arrangement):
     number_coordinates = len(arrangement)
 
-    i = 0
-    while (i < number_coordinates):
-        j = i + 1
-        while (j < number_coordinates):
+    for i in range(0, number_coordinates):
+        for j in range(i + 1, number_coordinates):
             queen_1 = arrangement[i]
             queen_2 = arrangement[j]
 
-            if queens_attack(queen_1, queen_2):
-                return False
-
-            j += 1
-        i += 1
+            if queens_attack(queen_1, queen_2): return False
 
     return True
 
@@ -60,8 +48,7 @@ for permutation in itertools.permutations(my_list):
         list_coordinates = []
 
         for num_coordinates in test_arrangement:
-            i = num_coordinates[0]
-            j = num_coordinates[1]
+            i, j = num_coordinates
 
             file = files[j]
             rank = str(8 - i)
@@ -70,6 +57,6 @@ for permutation in itertools.permutations(my_list):
 
         count += 1
         print(str(count) + ": " + str(list_coordinates))
-        time.sleep(1)
+        #time.sleep(1)
 
-print("The number of solutions to the queens puzzle =", count)
+print("The number of solutions to the queens puzzle = ", count)
