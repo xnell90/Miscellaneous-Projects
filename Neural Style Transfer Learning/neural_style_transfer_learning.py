@@ -20,7 +20,7 @@ parser = argparse.ArgumentParser(description = 'Neural Style Transfer with TF 2.
 parser.add_argument("c_image_path", type = str, metavar = "base_image_path",  help = "Path to Content Image.")
 parser.add_argument("s_image_path", type = str, metavar = "style_image_path", help = "Path to Style Image.")
 
-parser.add_argument("--new_image_name", type = str, default = 'combined', required = False, help = "New Image Name.")
+parser.add_argument("--n_image_path", type = str, default = 'combined', required = False, help = "New Image Name.")
 parser.add_argument("--max_dimension", type = int, default = 512, required = False, help = 'Maximum Dimension.')
 
 parser.add_argument("--save_progress", type = bool, default = False, required = False, help = 'Save Progress @ Every 10th Iteration.')
@@ -187,9 +187,9 @@ for i in tqdm(range(iterations), desc = '2)   Generating Stylized Image'):
         stylized_image = tensor_to_image(image_tensor)
         stylized_image.save(str(i) + '.png')
 
-new_image_name = args.new_image_name
+n_image_path = args.n_image_path
 
 print("3)   Displaying Stylized Image ...")
 stylized_image = tensor_to_image(image_tensor)
-stylized_image.save(new_image_name + '.png')
+stylized_image.save(n_image_path + '.png')
 stylized_image.show()
