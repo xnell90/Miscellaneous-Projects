@@ -5,13 +5,12 @@ def ascend(partition):
     if partition == [0]: return [[1]]
 
     ascend_partition = [partition + [1]]
-    index_to_increment = []
-
     unique_nums_in_partition = list(set(partition))
 
-    for num in unique_nums_in_partition:
-        get_index = partition.index(num)
-        index_to_increment.append(get_index)
+    index_to_increment = [
+        partition.index(num)
+        for num in unique_nums_in_partition
+    ]
 
     for index in index_to_increment:
         new_partition = list(partition)
