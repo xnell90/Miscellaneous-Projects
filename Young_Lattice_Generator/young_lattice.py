@@ -1,35 +1,35 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 
-def ascend(p):
-    if p == [0]: return [[1]]
+def ascend(partition):
+    if partition == [0]: return [[1]]
 
-    ascend_p = [p + [1]]
-    ind_to_incr = []
+    ascend_partition = [partition + [1]]
+    index_to_increment = []
 
-    unique_num_in_p = list(set(p))
+    unique_nums_in_partition = list(set(partition))
 
-    for num in unique_num_in_p:
-        get_index = p.index(num)
-        ind_to_incr.append(get_index)
+    for num in unique_nums_in_partition:
+        get_index = partition.index(num)
+        index_to_increment.append(get_index)
 
-    for index in ind_to_incr:
-        asc_p = list(p)
-        asc_p[index] += 1
-        ascend_p.insert(0, asc_p)
+    for index in index_to_increment:
+        new_partition = list(partition)
+        new_partition[index] += 1
+        ascend_partition.insert(0, new_partition)
 
-    return ascend_p
+    return ascend_partition
 
 def partitions(n):
     result = [[n]]
 
     if n == 0 or n == 1: return result
 
-    for index in range(1,n):
-        for p in partitions(n - index):
-            p_of_n = sorted([index] + p, reverse = True)
-            if p_of_n not in result:
-                result.append(p_of_n)
+    for index in range(1, n):
+        for partition in partitions(n - index):
+            partition_of_n = sorted([index] + partition, reverse = True)
+            if partition_of_n not in result:
+                result.append(partition_of_n)
 
     return result
 
@@ -53,9 +53,9 @@ def young_lattice(n):
 
             #Get the index of p at partition_of_order
             index_at_p = partitions_of_order.index(p)
-            
+
             #Add position for each node
-            positions[str(p)] = [-length / 2 + index_at_p + 1, order]
+            positions[str(p)] = [- length / 2 + index_at_p + 1, order]
 
     #Add edges
     for order in range(0, n):
@@ -70,7 +70,7 @@ def young_lattice(n):
         print("'" + v[index] + "'")
 
     print("*****************************************************************")
-    
+
     #Print out edges
     e = list(G.edges)
     print("Edges of the Young Lattice graph of order %d: " % n)
@@ -78,7 +78,7 @@ def young_lattice(n):
         print(e[index])
 
     #Draw graph and display it
-    nx.draw(G, with_labels = True, font_size = 12, pos = positions, node_size = 5)
+    nx.draw(G, with_labels = False, font_size = 12, pos = positions, node_size = 5)
     plt.show()
 
 while(True):
@@ -92,5 +92,3 @@ while(True):
     print("*****************************************************************")
     young_lattice(n)
     print("*****************************************************************\n")
-
-
