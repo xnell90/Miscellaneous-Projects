@@ -52,5 +52,6 @@ print("Puzzle Before...")
 puzzle = Sudoku_Board("input_puzzle.txt")
 puzzle.display()
 print()
+
 print("Puzzle After....")
 solve_sudoku(puzzle)
