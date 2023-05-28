@@ -57,6 +57,5 @@ for permutation in itertools.permutations(my_list):
 
         count += 1
         print(str(count) + ": " + str(list_coordinates))
-        #time.sleep(1)
 
 print("The number of solutions to the queens puzzle = ", count)
